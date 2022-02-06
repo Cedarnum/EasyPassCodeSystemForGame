@@ -5,17 +5,21 @@ using UnityEngine.UI;
 
 public class PassCodeManager : MonoBehaviour
 {
-    public GameObject[] numberDisp = new GameObject[4]; // ディスプレイ
-    public Text[] numberDispText = new Text[4]; // ディスプレイのテキストコンポーネント
-    public Button enterButton; // EnterButton
+    private GameObject passCodePanel;
+    [SerializeField] GameObject[] numberButtons;
+    [SerializeField] GameObject[] numberDisp = new GameObject[4]; // ディスプレイ
+    [SerializeField] Button enterButton; // EnterButton
 
-    public int numOfPush;  // 数字ボタン押下回数を管理する変数
+    [SerializeField] string correctString; // 正解の文字列
+    
 
-    public string correctString; // 正解の文字列
+    private int numOfPush;  // 数字ボタン押下回数を管理する変数
+    private Text[] numberDispText = new Text[4]; // ディスプレイのテキストコンポーネント
 
     // Start is called before the first frame update
     void Start()
     {
+        passCodePanel = transform.parent.gameObject;
         Initialize();
     }
 
@@ -25,6 +29,10 @@ public class PassCodeManager : MonoBehaviour
         if(numOfPush >= 4)
         {
             enterButton.interactable = true;
+            foreach(GameObject button in numberButtons)
+            {
+                button.GetComponent<Button>().interactable = false;
+            }
         }
     }
 
@@ -33,6 +41,11 @@ public class PassCodeManager : MonoBehaviour
     {
         // 数字ボタンのプッシュ回数を 0 で初期化
         numOfPush = 0;
+
+        foreach(GameObject button in numberButtons)
+        {
+            button.GetComponent<Button>().interactable = true;
+        }
 
         // EnterButton を 無効化
         enterButton.interactable = false;
@@ -74,10 +87,11 @@ public class PassCodeManager : MonoBehaviour
             Debug.Log("正解！！");
             // 正解なら　Unlock処理
             Unlock();
+            
         }
         else
         {
-            Debug.Log("間違っています");
+            Debug.Log("ちがうよ");
             // 不正解なら初期化
             Initialize();
         }
@@ -91,7 +105,7 @@ public class PassCodeManager : MonoBehaviour
     // アンロック処理
     public void Unlock()
     {
-        // ここにクリアイベントを実装
+        // ここにUnlock時のイベントを実装
         Debug.Log("例:　扉が開いた！");
     }
 }
